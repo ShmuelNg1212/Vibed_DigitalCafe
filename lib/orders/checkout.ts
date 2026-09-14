@@ -1,5 +1,3 @@
-import "server-only";
-
 import { db } from "@/lib/db";
 import { checkoutInputSchema, type CheckoutInput } from "@/lib/validation/catalog";
 

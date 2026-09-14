@@ -13,7 +13,7 @@ export default async function Home() {
     <main className="min-h-screen bg-[#f7f4ef] text-stone-900">
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-10">
         <Link href="/" className="flex items-center gap-3"><span className="grid size-10 place-items-center rounded-full bg-stone-900 text-amber-200"><Coffee className="size-5" /></span><span className="font-serif text-xl tracking-tight">Digital Cafe</span></Link>
-        <nav className="flex items-center gap-5 text-sm text-stone-600"><a href="#menu" className="hidden hover:text-stone-950 sm:block">Menu</a><a href="/orders" className="hover:text-stone-950">Your orders</a></nav>
+        <nav className="flex items-center gap-5 text-sm text-stone-600"><a href="#menu" className="hidden hover:text-stone-950 sm:block">Menu</a><Link href="/orders" className="hover:text-stone-950">Your orders</Link><Link href="/login" className="rounded-full border border-stone-300 px-4 py-2 hover:border-stone-900 hover:text-stone-950">Sign in</Link></nav>
       </header>
       <section className="mx-auto max-w-7xl px-6 pb-16 pt-10 lg:px-10 lg:pt-16">
         <div className="grid items-end gap-10 border-b border-stone-200 pb-16 lg:grid-cols-[1.15fr_0.85fr]">
