@@ -47,8 +47,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     dispatch({ type: "hydrate", items: readStoredItems() });
-    const hydrationFrame = window.requestAnimationFrame(() => setHydrated(true));
-    return () => window.cancelAnimationFrame(hydrationFrame);
+    Promise.resolve().then(() => setHydrated(true));
   }, []);
 
   useEffect(() => {

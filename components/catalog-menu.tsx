@@ -82,7 +82,7 @@ function ModifierPicker({
 }
 
 function ProductCard({ product }: { product: CatalogProduct }) {
-  const { addItem, hydrated } = useCart();
+  const { addItem } = useCart();
   const [customizing, setCustomizing] = useState(false);
 
   function add(modifiers: SelectedModifier[] = []) {
@@ -96,8 +96,8 @@ function ProductCard({ product }: { product: CatalogProduct }) {
       <ProductImage name={product.name} category={product.category} imageUrl={product.imageUrl} />
       <div className="p-3">
         <div className="flex items-start justify-between gap-3"><div><h3 className="font-serif text-2xl text-stone-900">{product.name}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-stone-600">{product.description}</p></div><span className="shrink-0 rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-900">{formatMoney(product.priceCents)}</span></div>
-        <div className="mt-5 flex items-center justify-between"><Badge variant="outline">{product.modifierGroups.length ? "Customizable" : "Ready to enjoy"}</Badge><Button type="button" size="sm" disabled={!hydrated} aria-label={!hydrated ? "Restoring your basket" : undefined} onClick={() => product.modifierGroups.length ? setCustomizing((open) => !open) : add()}>{product.modifierGroups.length ? (customizing ? "Close" : hydrated ? "Customize" : "Restoring...") : <><Plus /> {hydrated ? "Add" : "Restoring..."}</>}</Button></div>
-        {customizing && <ModifierPicker product={product} onAdd={add} onCancel={() => setCustomizing(false)} disabled={!hydrated} />}
+        <div className="mt-5 flex items-center justify-between"><Badge variant="outline">{product.modifierGroups.length ? "Customizable" : "Ready to enjoy"}</Badge><Button type="button" size="sm" onClick={() => product.modifierGroups.length ? setCustomizing((open) => !open) : add()}>{product.modifierGroups.length ? (customizing ? "Close" : "Customize") : <><Plus /> Add</>}</Button></div>
+        {customizing && <ModifierPicker product={product} onAdd={add} onCancel={() => setCustomizing(false)} />}
       </div>
     </article>
   );

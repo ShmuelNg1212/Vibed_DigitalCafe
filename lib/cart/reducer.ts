@@ -45,7 +45,7 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
       };
     }
     case "hydrate":
-      return { items: action.items };
+      return { items: mergeCartItems(state.items, action.items) };
     case "increment":
       return {
         items: state.items.map((item) =>
@@ -64,6 +64,20 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
     case "clear":
       return initialCartState;
   }
+}
+
+export function mergeCartItems(currentItems: CartItem[], storedItems: CartItem[]) {
+  const merged = new Map(currentItems.map((item) => [item.key, item]));
+  for (const storedItem of storedItems) {
+    const currentItem = merged.get(storedItem.key);
+    merged.set(
+      storedItem.key,
+      currentItem
+        ? { ...currentItem, quantity: currentItem.quantity + storedItem.quantity }
+        : storedItem,
+    );
+  }
+  return [...merged.values()];
 }
 
 export function cartItemCount(state: CartState) {
