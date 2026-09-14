@@ -105,6 +105,10 @@ Checkout is available at `/checkout` for authenticated customers. It validates
 name, email, and optional instructions, creates the order transactionally, then
 clears the cart and redirects to a user-scoped `/orders/success` confirmation.
 
+Product add and customization interactions do not require sign-in. The cart
+controls briefly show a restoring state while localStorage hydration completes,
+then remain available across refreshes.
+
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
 

@@ -25,10 +25,12 @@ function ModifierPicker({
   product,
   onAdd,
   onCancel,
+  disabled,
 }: {
   product: CatalogProduct;
   onAdd: (modifiers: SelectedModifier[]) => void;
   onCancel: () => void;
+  disabled?: boolean;
 }) {
   const [selected, setSelected] = useState<Record<string, string[]>>({});
 
@@ -68,18 +70,19 @@ function ModifierPicker({
           <div className="mt-3 flex flex-wrap gap-2">
             {group.options.map((option) => {
               const active = selected[group.id]?.includes(option.id);
-              return <button type="button" key={option.id} aria-pressed={active} onClick={() => toggle(group.id, option.id, group.maxSelections)} className={`rounded-full border px-3 py-2 text-sm transition ${active ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-600 hover:border-stone-500"}`}>{option.name}{option.priceDeltaCents ? ` · +${formatMoney(option.priceDeltaCents)}` : ""}</button>;
+              return <button type="button" key={option.id} aria-pressed={active} disabled={disabled} onClick={() => toggle(group.id, option.id, group.maxSelections)} className={`rounded-full border px-3 py-2 text-sm transition disabled:cursor-not-allowed disabled:opacity-50 ${active ? "border-stone-900 bg-stone-900 text-white" : "border-stone-200 bg-white text-stone-600 hover:border-stone-500"}`}>{option.name}{option.priceDeltaCents ? ` · +${formatMoney(option.priceDeltaCents)}` : ""}</button>;
             })}
           </div>
+          {!group.options.length && group.minSelections > 0 && <p className="mt-2 text-xs text-red-700">This option is currently unavailable.</p>}
         </fieldset>
       ))}
-      <div className="flex justify-end gap-2"><Button variant="ghost" size="sm" onClick={onCancel}>Cancel</Button><Button size="sm" disabled={!ready} onClick={() => onAdd(selectedModifiers)}>Add to order <ArrowRight /></Button></div>
+      <div className="flex justify-end gap-2"><Button type="button" variant="ghost" size="sm" onClick={onCancel}>Cancel</Button><Button type="button" size="sm" disabled={disabled || !ready} onClick={() => onAdd(selectedModifiers)}>Add to order <ArrowRight /></Button></div>
     </div>
   );
 }
 
 function ProductCard({ product }: { product: CatalogProduct }) {
-  const { addItem } = useCart();
+  const { addItem, hydrated } = useCart();
   const [customizing, setCustomizing] = useState(false);
 
   function add(modifiers: SelectedModifier[] = []) {
@@ -93,8 +96,8 @@ function ProductCard({ product }: { product: CatalogProduct }) {
       <ProductImage name={product.name} category={product.category} imageUrl={product.imageUrl} />
       <div className="p-3">
         <div className="flex items-start justify-between gap-3"><div><h3 className="font-serif text-2xl text-stone-900">{product.name}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-stone-600">{product.description}</p></div><span className="shrink-0 rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-900">{formatMoney(product.priceCents)}</span></div>
-        <div className="mt-5 flex items-center justify-between"><Badge variant="outline">{product.modifierGroups.length ? "Customizable" : "Ready to enjoy"}</Badge><Button size="sm" onClick={() => product.modifierGroups.length ? setCustomizing((open) => !open) : add()}>{product.modifierGroups.length ? (customizing ? "Close" : "Customize") : <><Plus /> Add</>}</Button></div>
-        {customizing && <ModifierPicker product={product} onAdd={add} onCancel={() => setCustomizing(false)} />}
+        <div className="mt-5 flex items-center justify-between"><Badge variant="outline">{product.modifierGroups.length ? "Customizable" : "Ready to enjoy"}</Badge><Button type="button" size="sm" disabled={!hydrated} aria-label={!hydrated ? "Restoring your basket" : undefined} onClick={() => product.modifierGroups.length ? setCustomizing((open) => !open) : add()}>{product.modifierGroups.length ? (customizing ? "Close" : hydrated ? "Customize" : "Restoring...") : <><Plus /> {hydrated ? "Add" : "Restoring..."}</>}</Button></div>
+        {customizing && <ModifierPicker product={product} onAdd={add} onCancel={() => setCustomizing(false)} disabled={!hydrated} />}
       </div>
     </article>
   );
@@ -102,7 +105,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
 
 function CartLines() {
   const { items, increment, decrement, removeItem } = useCart();
-  return <div className="space-y-5">{items.map((item) => <div key={item.key} className="border-b border-stone-100 pb-5"><div className="flex justify-between gap-3"><div><p className="font-medium text-stone-900">{item.productName}</p>{item.selectedModifiers.length > 0 && <p className="mt-1 text-xs leading-5 text-stone-500">{item.selectedModifiers.flatMap((modifier) => modifier.optionNames).join(" · ")}</p>}</div><p className="text-sm font-semibold text-stone-900">{formatMoney(item.unitPriceCents * item.quantity)}</p></div><div className="mt-3 flex items-center justify-between"><div className="flex items-center gap-2 rounded-full border border-stone-200 p-1"><button aria-label={`Decrease ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => decrement(item.key)}><Minus className="size-3" /></button><span className="w-5 text-center text-sm">{item.quantity}</span><button aria-label={`Increase ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => increment(item.key)}><Plus className="size-3" /></button></div><button aria-label={`Remove ${item.productName}`} className="text-stone-400 hover:text-red-700" onClick={() => removeItem(item.key)}><Trash2 className="size-4" /></button></div></div>)}</div>;
+  return <div className="space-y-5">{items.map((item) => <div key={item.key} className="border-b border-stone-100 pb-5"><div className="flex justify-between gap-3"><div><p className="font-medium text-stone-900">{item.productName}</p>{item.selectedModifiers.length > 0 && <p className="mt-1 text-xs leading-5 text-stone-500">{item.selectedModifiers.flatMap((modifier) => modifier.optionNames).join(" · ")}</p>}</div><p className="text-sm font-semibold text-stone-900">{formatMoney(item.unitPriceCents * item.quantity)}</p></div><div className="mt-3 flex items-center justify-between"><div className="flex items-center gap-2 rounded-full border border-stone-200 p-1"><button type="button" aria-label={`Decrease ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => decrement(item.key)}><Minus className="size-3" /></button><span className="w-5 text-center text-sm">{item.quantity}</span><button type="button" aria-label={`Increase ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => increment(item.key)}><Plus className="size-3" /></button></div><button type="button" aria-label={`Remove ${item.productName}`} className="text-stone-400 hover:text-red-700" onClick={() => removeItem(item.key)}><Trash2 className="size-4" /></button></div></div>)}</div>;
 }
 
 function CartContent() {
