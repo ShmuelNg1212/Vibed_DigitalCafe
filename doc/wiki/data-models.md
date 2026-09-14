@@ -79,6 +79,12 @@ deterministic placeholder `imageUrl` values. Modifier groups and options use
 stable UUIDs so repeated `npx prisma db seed` runs update fixtures rather than
 creating duplicates.
 
+`Product.imageUrl` is a nullable display asset reference. It is currently
+populated with deterministic Unsplash URLs for the demo, but it is not part of
+order snapshots because historical receipt identity depends on product names
+and prices rather than presentation assets. Missing image values are supported
+by the product-card fallback.
+
 The Phase 2 cart is not persisted in Prisma. Its normalized client payload
 contains product IDs, quantities, and selected modifier group/option IDs. The
 cart also keeps display snapshots for names and calculated cents, but those

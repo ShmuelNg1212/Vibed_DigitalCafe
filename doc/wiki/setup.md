@@ -92,6 +92,10 @@ non-destructive and does not delete older products or alter orders.
 
 The customer menu displays the seeded Hot Coffee, Iced Drinks, and Bakery
 products.
+
+Product fixtures include deterministic Unsplash image URLs. The application
+allowlists `images.unsplash.com` in `next.config.ts`; if image delivery is not
+available, product cards retain their category-based visual fallback.
 The cart is intentionally client-side and non-persistent; refreshing the page
 clears it until cart persistence is designed in a later phase.
 
