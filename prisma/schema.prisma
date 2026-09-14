@@ -1,0 +1,128 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+}
+
+enum ProductCategory {
+  COFFEE
+  PASTRY
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  PREPARING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String   @id @default(uuid()) @db.Uuid
+  email        String   @unique
+  name         String
+  passwordHash String?
+  role         UserRole @default(CUSTOMER)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  orders       Order[]
+}
+
+model Product {
+  id             String          @id @default(uuid()) @db.Uuid
+  name           String
+  slug           String          @unique
+  description    String?
+  category       ProductCategory
+  priceCents     Int
+  imageUrl       String?
+  isActive       Boolean         @default(true)
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  modifierGroups ModifierGroup[]
+  orderItems     OrderItem[]
+
+  @@index([category, isActive])
+  @@index([isActive, createdAt])
+}
+
+model ModifierGroup {
+  id            String           @id @default(uuid()) @db.Uuid
+  name          String
+  minSelections Int              @default(0)
+  maxSelections Int              @default(1)
+  sortOrder     Int              @default(0)
+  productId     String           @db.Uuid
+  product       Product          @relation(fields: [productId], references: [id], onDelete: Cascade)
+  options       ModifierOption[]
+
+  @@index([productId, sortOrder])
+}
+
+model ModifierOption {
+  id                 String              @id @default(uuid()) @db.Uuid
+  name               String
+  priceDeltaCents    Int                 @default(0)
+  sortOrder          Int                 @default(0)
+  isActive           Boolean             @default(true)
+  modifierGroupId    String              @db.Uuid
+  modifierGroup      ModifierGroup       @relation(fields: [modifierGroupId], references: [id], onDelete: Cascade)
+  orderItemModifiers OrderItemModifier[]
+
+  @@index([modifierGroupId, isActive, sortOrder])
+}
+
+model Order {
+  id            String      @id @default(uuid()) @db.Uuid
+  orderNumber   String      @unique @default(cuid())
+  userId        String?     @db.Uuid
+  status        OrderStatus @default(PENDING)
+  subtotalCents Int
+  taxCents      Int
+  totalCents    Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  items         OrderItem[]
+
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
+model OrderItem {
+  id             String              @id @default(uuid()) @db.Uuid
+  orderId        String              @db.Uuid
+  productId      String?             @db.Uuid
+  productName    String
+  unitPriceCents Int
+  quantity       Int
+  lineTotalCents Int
+  order          Order               @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product        Product?            @relation(fields: [productId], references: [id], onDelete: SetNull)
+  modifiers      OrderItemModifier[]
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+model OrderItemModifier {
+  id               String          @id @default(uuid()) @db.Uuid
+  orderItemId      String          @db.Uuid
+  modifierOptionId String?         @db.Uuid
+  name             String
+  priceDeltaCents  Int
+  orderItem        OrderItem       @relation(fields: [orderItemId], references: [id], onDelete: Cascade)
+  modifierOption   ModifierOption? @relation(fields: [modifierOptionId], references: [id], onDelete: SetNull)
+
+  @@index([orderItemId])
+  @@index([modifierOptionId])
+}
