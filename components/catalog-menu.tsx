@@ -81,7 +81,7 @@ function ModifierPicker({
   );
 }
 
-function ProductCard({ product }: { product: CatalogProduct }) {
+export function ProductCard({ product }: { product: CatalogProduct }) {
   const { addItem } = useCart();
   const [customizing, setCustomizing] = useState(false);
   const [added, setAdded] = useState(false);
@@ -107,7 +107,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
   );
 }
 
-function CartLines() {
+export function CartLines() {
   const { items, increment, decrement, removeItem } = useCart();
   return <div className="space-y-5">{items.map((item) => <div key={item.key} className="border-b border-stone-100 pb-5"><div className="flex justify-between gap-3"><div><p className="font-medium text-stone-900">{item.productName}</p>{item.selectedModifiers.length > 0 && <p className="mt-1 text-xs leading-5 text-stone-500">{item.selectedModifiers.flatMap((modifier) => modifier.optionNames).join(" · ")}</p>}</div><p className="text-sm font-semibold text-stone-900">{formatMoney(item.unitPriceCents * item.quantity)}</p></div><div className="mt-3 flex items-center justify-between"><div className="flex items-center gap-2 rounded-full border border-stone-200 p-1"><button type="button" aria-label={`Decrease ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => decrement(item.key)}><Minus className="size-3" /></button><span className="w-5 text-center text-sm">{item.quantity}</span><button type="button" aria-label={`Increase ${item.productName}`} className="grid size-7 place-items-center rounded-full hover:bg-stone-100" onClick={() => increment(item.key)}><Plus className="size-3" /></button></div><button type="button" aria-label={`Remove ${item.productName}`} className="text-stone-400 hover:text-red-700" onClick={() => removeItem(item.key)}><Trash2 className="size-4" /></button></div></div>)}</div>;
 }

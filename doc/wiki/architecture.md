@@ -119,6 +119,11 @@ confirmation. Product additions update the shared provider used by the desktop
 summary, mobile sheet, and cart trigger, so an accepted item is immediately
 observable without requiring authentication.
 
+The add-to-cart event path is covered by client component tests for both direct
+products and modifier configurations. These tests mount `ProductCard` and cart
+lines under the same provider, verifying that UI events produce visible cart
+state rather than only testing the reducer in isolation.
+
 Cart interactions are available to signed-out visitors. During the brief
 localStorage hydration window, the provider merges persisted lines with any
 in-memory actions rather than replacing them. Add and customize controls remain
