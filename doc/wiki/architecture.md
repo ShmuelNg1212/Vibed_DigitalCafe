@@ -119,6 +119,11 @@ confirmation. Product additions update the shared provider used by the desktop
 summary, mobile sheet, and cart trigger, so an accepted item is immediately
 observable without requiring authentication.
 
+`ProductCard` reports successful direct or customized additions to
+`CatalogMenu`, which opens the controlled cart sheet. This keeps the cart state
+in Context while making the successful add immediately visible on compact
+layouts.
+
 The add-to-cart event path is covered by client component tests for both direct
 products and modifier configurations. These tests mount `ProductCard` and cart
 lines under the same provider, verifying that UI events produce visible cart

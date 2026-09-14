@@ -116,6 +116,9 @@ on compact layouts the cart sheet can be opened to review the added line.
 `npm test` includes jsdom component tests for direct and customized add-to-cart
 flows, shared provider updates, and persisted cart behavior.
 
+It also verifies that the menu opens the cart sheet after a successful direct
+product add.
+
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
 
