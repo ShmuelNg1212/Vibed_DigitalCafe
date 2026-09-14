@@ -44,6 +44,8 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
         ),
       };
     }
+    case "hydrate":
+      return { items: action.items };
     case "increment":
       return {
         items: state.items.map((item) =>

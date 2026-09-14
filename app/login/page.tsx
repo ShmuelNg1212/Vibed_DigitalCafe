@@ -3,9 +3,11 @@
 import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [error, setError] = useState("");
   const [pending, setPending] = useState(false);
 
@@ -20,7 +22,7 @@ export default function LoginPage() {
       body: JSON.stringify({ email: form.get("email"), password: form.get("password") }),
     });
     if (!response.ok) setError("Those credentials did not work.");
-    else router.push("/");
+    else router.push(searchParams.get("next") || "/");
     setPending(false);
   }
 

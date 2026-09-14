@@ -22,6 +22,7 @@ export type CartState = { items: CartItem[] };
 
 export type CartAction =
   | { type: "add"; item: AddCartItem }
+  | { type: "hydrate"; items: CartItem[] }
   | { type: "increment"; key: string }
   | { type: "decrement"; key: string }
   | { type: "remove"; key: string }

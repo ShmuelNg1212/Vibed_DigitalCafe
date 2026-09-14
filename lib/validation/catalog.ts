@@ -21,8 +21,21 @@ export const cartItemSchema = z.object({
 });
 
 export const checkoutInputSchema = z.object({
-  userId: z.string().uuid().optional(),
   items: z.array(cartItemSchema).min(1).max(100),
 });
 
 export type CheckoutInput = z.infer<typeof checkoutInputSchema>;
+
+export const customerDetailsSchema = z.object({
+  name: z.string().trim().min(1, "Enter your name").max(100, "Name is too long"),
+  email: z.string().trim().toLowerCase().email("Enter a valid email address"),
+  specialInstructions: z.string().trim().max(500, "Instructions are too long").optional(),
+});
+
+export const submitOrderSchema = z.object({
+  customer: customerDetailsSchema,
+  items: checkoutInputSchema.shape.items,
+});
+
+export type CustomerDetails = z.infer<typeof customerDetailsSchema>;
+export type SubmitOrderInput = z.infer<typeof submitOrderSchema>;

@@ -16,3 +16,10 @@ export function getOrderForUser(orderId: string, userId: string) {
     include: { items: { include: { modifiers: true } } },
   });
 }
+
+export function getOrderByNumberForUser(orderNumber: string, userId: string) {
+  return db.order.findFirst({
+    where: { orderNumber, userId },
+    include: { items: { include: { modifiers: true } } },
+  });
+}
