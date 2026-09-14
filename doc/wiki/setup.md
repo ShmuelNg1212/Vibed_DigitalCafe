@@ -42,9 +42,10 @@ Prisma can run its local development server:
 npx prisma dev --detach --name digitalcafe
 ```
 
-Use the PostgreSQL URL printed by that command as `DATABASE_URL`, then run the
-migration and seed commands above. The exact port is assigned by Prisma and
-can differ between machines.
+Copy the PostgreSQL URL printed by that command into `.env` as `DATABASE_URL`,
+then restart the Next.js dev server before running the migration and seed
+commands. The exact port is assigned by Prisma and can differ between
+machines. Migrations, seed, and Next.js must all use the same `.env` value.
 
 The deterministic seed creates:
 
@@ -81,6 +82,7 @@ npm run db:validate
 npm run db:generate
 npm run db:migrate -- --name describe_change
 npx prisma db seed
+npm run db:check
 ```
 
 `npx prisma db seed` is configured through `prisma.config.ts` to run
@@ -95,3 +97,24 @@ clears it until cart persistence is designed in a later phase.
 
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
+
+## Catalog Troubleshooting
+
+Run `npm run db:check` to verify the configured database connection, latest
+migration, and active product count. The command redacts credentials and exits
+non-zero if the database cannot be reached or migrations are unavailable.
+
+If the demo shows no products:
+
+1. Check for `P1001` or `Can't reach database server` errors in the Next.js
+   server log.
+2. Confirm a PostgreSQL service is running at the host and port in `.env`.
+3. If using `npx prisma dev`, copy its printed TCP URL into `.env` rather than
+   using a one-command `DATABASE_URL` override.
+4. Run `npx prisma migrate deploy` and `npx prisma db seed` with that same
+   environment.
+5. Restart `npm run dev` after changing `.env`.
+
+A reachable database with zero active products displays an intentional empty
+catalog message. A connection or migration failure displays the catalog error
+boundary instead of being silently rendered as an empty menu.
