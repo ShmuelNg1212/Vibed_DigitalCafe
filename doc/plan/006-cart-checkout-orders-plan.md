@@ -106,35 +106,35 @@ approved and executed on `feat/cart-checkout-orders`.
 
 ## Verification
 
-- [ ] Run migrations and seed against the configured local database.
-- [ ] Test cart add/remove/increment/decrement, refresh persistence, malformed
+- [x] Run migrations and seed against the configured local database.
+- [x] Test cart add/remove/increment/decrement, refresh persistence, malformed
       localStorage, clear, subtotal, tax, and total.
-- [ ] Test checkout form validation and pending/error recovery.
-- [ ] Complete an authenticated checkout and verify one order, expected item
+- [x] Test checkout form validation and pending/error recovery.
+- [x] Complete an authenticated checkout and verify one order, expected item
       rows, modifier snapshots, customer snapshots, totals, and success redirect.
-- [ ] Verify cart clears only after successful order creation.
-- [ ] Verify failed checkout preserves the cart.
-- [ ] Verify inactive/stale products and invalid modifiers roll back without
+- [x] Verify cart clears only after successful order creation.
+- [x] Verify failed checkout preserves the cart.
+- [x] Verify inactive/stale products and invalid modifiers roll back without
       creating partial orders.
-- [ ] Verify another user's order cannot be viewed on the success route.
-- [ ] Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`.
-- [ ] Inspect the full diff for secrets, client-side Prisma imports, and
+- [x] Verify another user's order cannot be viewed on the success route.
+- [x] Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`.
+- [x] Inspect the full diff for secrets, client-side Prisma imports, and
       untrusted monetary values crossing the server action.
 
 ## Commit, Rendezvous, and Documentation Sync
 
-- [ ] Inspect `git status`, the complete diff, and recent commits before each
+- [x] Inspect `git status`, the complete diff, and recent commits before each
       commit.
-- [ ] Commit schema/server changes with a Conventional Commit such as
+- [x] Commit schema/server changes with a Conventional Commit such as
       `feat(orders): add transactional checkout submission`.
-- [ ] Commit cart persistence/UI changes with a Conventional Commit such as
+- [x] Commit cart persistence/UI changes with a Conventional Commit such as
       `feat(cart): persist cart and add checkout form`.
-- [ ] Update `doc/wiki/setup.md` with checkout/test commands and localStorage
+- [x] Update `doc/wiki/setup.md` with checkout/test commands and localStorage
       behavior.
-- [ ] Update `doc/wiki/architecture.md` with cart shell, server action, and
+- [x] Update `doc/wiki/architecture.md` with cart shell, server action, and
       success-page boundaries.
-- [ ] Update `doc/wiki/data-models.md` with order customer snapshots and
+- [x] Update `doc/wiki/data-models.md` with order customer snapshots and
       transaction semantics.
-- [ ] Merge `feat/cart-checkout-orders` back into `main` only after all checks
+- [x] Merge `feat/cart-checkout-orders` back into `main` only after all checks
       pass.
-- [ ] Verify `main` is clean and the complete checkout workflow works locally.
+- [x] Verify `main` is clean and the complete checkout workflow works locally.
