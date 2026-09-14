@@ -1,0 +1,71 @@
+# Data Models
+
+Prisma uses PostgreSQL as the relational source of truth. Identifiers are UUIDs
+and monetary amounts are integer cents in the application's base currency.
+
+## User
+
+`User` represents a customer or administrator. Email is unique, the role is
+`CUSTOMER` or `ADMIN`, and `passwordHash` stores only a one-way password hash.
+A user can own many orders. Authorization is enforced on the server and is not
+based on whether an admin link is visible in the UI.
+
+## Product
+
+`Product` is a sellable coffee or pastry. It has a unique URL slug, category,
+integer `priceCents`, optional description and image URL, and an `isActive`
+flag. Products are deactivated instead of deleted so catalog history remains
+safe.
+
+A product owns many `ModifierGroup` records and can be referenced by many
+`OrderItem` records.
+
+## ModifierGroup and ModifierOption
+
+`ModifierGroup` defines a product-specific choice set such as `Milk`. Its
+`minSelections` and `maxSelections` values define the allowed selection range.
+`ModifierOption` stores a choice such as `Oat milk`, including an integer
+`priceDeltaCents` and its own active flag.
+
+The public catalog includes active groups and options. Checkout re-reads the
+records and validates the submitted selections in a transaction.
+
+## Order
+
+`Order` is the checkout aggregate. It may reference a `User`, has a unique
+human-readable order number, and tracks `PENDING`, `CONFIRMED`, `PREPARING`,
+`READY`, `COMPLETED`, or `CANCELLED` status. Subtotal, tax, and total are
+persisted integer snapshots. Status transitions are constrained by server-side
+domain logic.
+
+An order has many order items. If a user is removed, the order remains and its
+`userId` is set to null.
+
+## OrderItem
+
+`OrderItem` records a purchased product, quantity, unit price, and line total.
+It keeps `productName` and `unitPriceCents` snapshots because the current
+product can later be renamed or repriced. The optional `productId` relation is
+retained for reporting and is set to null rather than destroying history.
+
+## OrderItemModifier
+
+`OrderItemModifier` records each selected modifier on an order item. It stores
+the selected option relation when available, plus `name` and `priceDeltaCents`
+snapshots. This preserves receipts even if an option is renamed, repriced, or
+deactivated later.
+
+## Relationship Summary
+
+```text
+User 1 ---- * Order 1 ---- * OrderItem * ---- 1 Product
+                                      |
+                                      *
+                              OrderItemModifier * ---- 1 ModifierOption
+
+Product 1 ---- * ModifierGroup 1 ---- * ModifierOption
+```
+
+Checkout calculates all prices from current active catalog records, then writes
+the order and all snapshots in one Prisma transaction. Browser-submitted totals
+are never trusted.
