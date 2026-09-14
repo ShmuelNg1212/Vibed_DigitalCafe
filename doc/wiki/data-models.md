@@ -10,6 +10,10 @@ and monetary amounts are integer cents in the application's base currency.
 A user can own many orders. Authorization is enforced on the server and is not
 based on whether an admin link is visible in the UI.
 
+Registration creates a `CUSTOMER` user with a bcrypt password hash and never
+stores plaintext credentials. Orders retain `userId` plus customer snapshots;
+history queries must filter by the authenticated user ID.
+
 ## Product
 
 `Product` is a sellable coffee or pastry. It has a unique URL slug, category,

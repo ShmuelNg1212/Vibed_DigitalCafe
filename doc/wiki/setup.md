@@ -110,6 +110,10 @@ hydrates persisted lines safely and merges them with immediate in-memory
 actions, so localStorage restoration cannot leave product controls stuck or
 discard a first click.
 
+Create an account at `/register` or use the seeded demo customer. Successful
+registration signs the user in immediately. Checkout requires an account and
+preserves the local cart while the user signs in or registers.
+
 If the app is opened through the forwarded development hostname, restart
 `npm run dev` after configuration changes and perform a hard browser reload.
 The configured development origin is allowlisted so the client bundle and HMR
