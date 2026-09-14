@@ -113,6 +113,9 @@ discard a first click.
 After an add, the cart trigger count and live confirmation update immediately;
 on compact layouts the cart sheet can be opened to review the added line.
 
+`npm test` includes jsdom component tests for direct and customized add-to-cart
+flows, shared provider updates, and persisted cart behavior.
+
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
 
