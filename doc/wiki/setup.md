@@ -1,5 +1,8 @@
 # Local Setup
 
+This is the canonical local development guide. It does not require Vercel or a
+hosted database.
+
 ## Requirements
 
 - Node.js 22 or newer
@@ -19,10 +22,41 @@ The local environment template contains:
 
 - `DATABASE_URL`: PostgreSQL connection string used by Prisma.
 - `TAX_RATE_BPS`: tax rate in basis points. `0` disables tax for local use.
+- `NEXT_PUBLIC_TAX_RATE_BPS`: browser tax estimate in basis points. Keep it
+  aligned with `TAX_RATE_BPS` for consistent checkout display.
 - `SESSION_SECRET`: secret used to sign the HTTP-only development session
   cookie. Use a long random value outside local development.
 
 Never commit `.env` or real credentials. `.env.example` is safe to commit.
+
+## Recommended Quick Start
+
+From a fresh clone:
+
+```bash
+npm install
+cp .env.example .env
+npm run db:generate
+npx prisma dev --detach --name digitalcafe
+npx prisma dev ls
+```
+
+Copy the `DATABASE_URL` TCP URL printed by `prisma dev ls` into `.env`. Then
+run:
+
+```bash
+npx prisma migrate deploy
+npx prisma db seed
+npm run db:check
+npm run dev
+```
+
+If you see `@prisma/client did not initialize yet`, run
+`npm run db:generate` from the repository root and restart `npm run dev`.
+Prisma Client generation is also wired to npm's `prepare` lifecycle for fresh
+installs.
+
+Open `http://localhost:3000`.
 
 ## Database Initialization
 
@@ -31,8 +65,9 @@ With an existing PostgreSQL database, set `DATABASE_URL` in `.env`, then run:
 ```bash
 npm run db:validate
 npm run db:generate
-npm run db:migrate -- --name initial_architecture
+npx prisma migrate deploy
 npx prisma db seed
+npm run db:check
 ```
 
 For a disposable local database without a separate PostgreSQL installation,
