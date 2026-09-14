@@ -73,6 +73,12 @@ The client presents these as Hot Coffee, Iced Drinks, and Bakery through a
 typed presentation map; the enum remains a small controlled taxonomy rather
 than an admin-managed category table.
 
+The local Prisma seed provides four products in each category. Products use
+stable unique slugs, descriptions, positive integer-cent prices, and
+deterministic placeholder `imageUrl` values. Modifier groups and options use
+stable UUIDs so repeated `npx prisma db seed` runs update fixtures rather than
+creating duplicates.
+
 The Phase 2 cart is not persisted in Prisma. Its normalized client payload
 contains product IDs, quantities, and selected modifier group/option IDs. The
 cart also keeps display snapshots for names and calculated cents, but those

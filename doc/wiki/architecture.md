@@ -43,7 +43,7 @@ lib/
 prisma/
   schema.prisma                    relational model source of truth
   migrations/                      committed database migrations
-  seed.ts                          deterministic local data
+  seed.ts                          typed, idempotent local catalog data
 doc/
   study/                           architecture studies
   plan/                            executable workflow plans
@@ -90,3 +90,8 @@ be applied during deployment. Product availability uses soft deactivation;
 order records remain auditable. Payments and fulfillment integrations are not
 part of this initial architecture, but explicit order statuses and persisted
 totals leave room for them.
+
+The seed runner is configured in `prisma.config.ts` as
+`tsx prisma/seed.ts`. It upserts the two local users, twelve catalog products,
+and their deterministic modifier records. The fixture is deliberately
+non-destructive so existing product references and order history are preserved.

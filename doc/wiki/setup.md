@@ -32,7 +32,7 @@ With an existing PostgreSQL database, set `DATABASE_URL` in `.env`, then run:
 npm run db:validate
 npm run db:generate
 npm run db:migrate -- --name initial_architecture
-npm run db:seed
+npx prisma db seed
 ```
 
 For a disposable local database without a separate PostgreSQL installation,
@@ -50,8 +50,11 @@ The deterministic seed creates:
 
 - `admin@digitalcafe.local` with password `digitalcafe-demo`
 - `customer@digitalcafe.local` with password `digitalcafe-demo`
-- House Latte with whole and oat milk options
-- Morning Bun
+- Four Hot Coffee products, including House Latte with whole, oat, and almond
+  milk options
+- Four Iced Beverages, including Slow Steep Cold Brew and Iced Vanilla Latte
+- Four Pastries & Bakery products, including Morning Bun and Almond Croissant
+- Deterministic placeholder image URLs for every product
 
 These credentials are for local development only.
 
@@ -77,10 +80,16 @@ npm run db:format
 npm run db:validate
 npm run db:generate
 npm run db:migrate -- --name describe_change
-npm run db:seed
+npx prisma db seed
 ```
 
-The Phase 2 customer menu seeds Hot Coffee, Iced Drinks, and Bakery products.
+`npx prisma db seed` is configured through `prisma.config.ts` to run
+`tsx prisma/seed.ts`. The seed uses stable product slugs, user emails, and
+modifier IDs, so it can be run repeatedly without duplicate rows. It is
+non-destructive and does not delete older products or alter orders.
+
+The customer menu displays the seeded Hot Coffee, Iced Drinks, and Bakery
+products.
 The cart is intentionally client-side and non-persistent; refreshing the page
 clears it until cart persistence is designed in a later phase.
 
