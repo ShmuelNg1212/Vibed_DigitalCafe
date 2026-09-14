@@ -1,10 +1,11 @@
 import { db } from "@/lib/db";
-import { checkoutInputSchema, type CheckoutInput } from "@/lib/validation/catalog";
+import { submitOrderSchema, type SubmitOrderInput } from "@/lib/validation/catalog";
 
 const taxRateBps = Number.parseInt(process.env.TAX_RATE_BPS ?? "0", 10);
 
-export async function createOrder(input: CheckoutInput) {
-  const parsed = checkoutInputSchema.parse(input);
+export async function createOrder(input: SubmitOrderInput & { userId: string }) {
+  const { userId, ...orderInput } = input;
+  const parsed = submitOrderSchema.parse(orderInput);
 
   return db.$transaction(async (tx) => {
     const productIds = [...new Set(parsed.items.map((item) => item.productId))];
@@ -59,7 +60,10 @@ export async function createOrder(input: CheckoutInput) {
     const taxCents = Math.round((subtotalCents * taxRateBps) / 10_000);
     return tx.order.create({
       data: {
-        userId: parsed.userId,
+        userId,
+        customerName: parsed.customer.name,
+        customerEmail: parsed.customer.email,
+        specialInstructions: parsed.customer.specialInstructions || null,
         subtotalCents,
         taxCents,
         totalCents: subtotalCents + taxCents,

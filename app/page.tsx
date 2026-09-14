@@ -3,7 +3,6 @@ import Link from "next/link";
 
 import { CatalogMenu } from "@/components/catalog-menu";
 import { getActiveCatalog } from "@/lib/catalog/queries";
-import { CartProvider } from "@/lib/cart/context";
 
 export const dynamic = "force-dynamic";
 
@@ -23,7 +22,7 @@ export default async function Home() {
         </div>
       </section>
       <section id="menu" className="mx-auto max-w-7xl px-6 pb-20 lg:px-10">
-        {products.length > 0 ? <CartProvider><CatalogMenu products={products} /></CartProvider> : <div className="rounded-2xl border border-dashed border-stone-300 bg-white/60 px-6 py-16 text-center"><p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Freshly brewing</p><h2 className="mt-3 font-serif text-3xl text-stone-900">The menu is between batches.</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-600">There are no active items available right now. Please check back soon.</p></div>}
+        {products.length > 0 ? <CatalogMenu products={products} /> : <div className="rounded-2xl border border-dashed border-stone-300 bg-white/60 px-6 py-16 text-center"><p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Freshly brewing</p><h2 className="mt-3 font-serif text-3xl text-stone-900">The menu is between batches.</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-600">There are no active items available right now. Please check back soon.</p></div>}
       </section>
     </main>
   );

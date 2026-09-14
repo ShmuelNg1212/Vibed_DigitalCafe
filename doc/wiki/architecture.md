@@ -35,6 +35,7 @@ components/
 lib/
   db.ts                            Prisma client singleton
   cart/                            client cart reducer, context, and payload
+  cart/totals.ts                   shared integer-cent display calculations
   auth/session.ts                  signed cookie session boundary
   catalog/queries.ts               active catalog query
   orders/checkout.ts               validated transactional checkout
@@ -103,6 +104,15 @@ errors reach `app/error.tsx`, where the user sees a safe catalog connection
 message; a successful query with no active products renders a separate empty
 catalog state. `npm run db:check` is a server-only diagnostic for connection,
 migration, and active-product status and is not exposed as a browser route.
+
+The root `CartShell` provides the client-only cart context across the menu and
+checkout routes. It hydrates a versioned `digital-cafe-cart` localStorage
+envelope after the first render and calculates display subtotal, tax, and total
+in integer cents. Checkout sends only IDs, quantities, and customer details to
+the `submitOrder` Server Action. The server derives the authenticated user,
+re-reads active catalog records, and creates the order and snapshots in one
+Prisma transaction. Success clears the cart and redirects to a user-scoped
+order confirmation page.
 
 Product images remain nullable display assets on `Product`. `ProductImage` uses
 `next/image` with a reserved responsive frame, `object-cover`, and an exact

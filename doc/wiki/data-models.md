@@ -100,3 +100,17 @@ database connection or migration error reaches the route error boundary; a
 successful query with no active products renders an intentional empty-catalog
 state. This prevents a `P1001` connection failure from appearing to customers
 as a normal empty menu.
+
+## Order Customer Snapshots
+
+`Order` stores `customerName`, `customerEmail`, and optional
+`specialInstructions` snapshots in addition to its optional `userId`. These
+values represent the details submitted for that order and remain stable if a
+user profile changes later. Authenticated checkout derives `userId` from the
+signed session and never trusts a client-supplied user ID.
+
+Checkout re-reads active products and modifiers, recalculates integer-cent
+subtotal, tax, and total values, and creates `Order`, `OrderItem`, and
+`OrderItemModifier` rows in one Prisma transaction. Invalid product or modifier
+payloads roll back the complete order. Cart localStorage values are display
+state only and are not persisted as order prices.
