@@ -66,6 +66,19 @@ User 1 ---- * Order 1 ---- * OrderItem * ---- 1 Product
 Product 1 ---- * ModifierGroup 1 ---- * ModifierOption
 ```
 
+## Customer Menu and Cart
+
+`ProductCategory` currently contains `COFFEE`, `ICED_DRINK`, and `PASTRY`.
+The client presents these as Hot Coffee, Iced Drinks, and Bakery through a
+typed presentation map; the enum remains a small controlled taxonomy rather
+than an admin-managed category table.
+
+The Phase 2 cart is not persisted in Prisma. Its normalized client payload
+contains product IDs, quantities, and selected modifier group/option IDs. The
+cart also keeps display snapshots for names and calculated cents, but those
+values are never trusted by checkout. The server re-reads active catalog rows
+and recalculates authoritative totals.
+
 Checkout calculates all prices from current active catalog records, then writes
 the order and all snapshots in one Prisma transaction. Browser-submitted totals
 are never trusted.

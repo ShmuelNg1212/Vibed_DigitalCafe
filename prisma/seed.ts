@@ -60,6 +60,51 @@ async function main() {
       priceCents: 390,
     },
   });
+
+  const icedCoffee = await db.product.upsert({
+    where: { slug: "cold-brew" },
+    update: {
+      name: "Slow Steep Cold Brew",
+      category: ProductCategory.ICED_DRINK,
+      priceCents: 520,
+      isActive: true,
+    },
+    create: {
+      name: "Slow Steep Cold Brew",
+      slug: "cold-brew",
+      description: "Smooth, chocolatey, and steeped overnight for a clean finish.",
+      category: ProductCategory.ICED_DRINK,
+      priceCents: 520,
+    },
+  });
+  const icedMilkGroup = await db.modifierGroup.upsert({
+    where: { id: "00000000-0000-4000-8000-000000000002" },
+    update: { productId: icedCoffee.id, name: "Finish", minSelections: 0, maxSelections: 1 },
+    create: {
+      id: "00000000-0000-4000-8000-000000000002",
+      productId: icedCoffee.id,
+      name: "Finish",
+      minSelections: 0,
+      maxSelections: 1,
+    },
+  });
+  await db.modifierOption.upsert({
+    where: { id: "00000000-0000-4000-8000-000000000021" },
+    update: { name: "Oat milk", priceDeltaCents: 70, modifierGroupId: icedMilkGroup.id, isActive: true },
+    create: { id: "00000000-0000-4000-8000-000000000021", name: "Oat milk", priceDeltaCents: 70, modifierGroupId: icedMilkGroup.id },
+  });
+
+  await db.product.upsert({
+    where: { slug: "citrus-sparkler" },
+    update: { name: "Citrus Sparkler", category: ProductCategory.ICED_DRINK, priceCents: 450, isActive: true },
+    create: {
+      name: "Citrus Sparkler",
+      slug: "citrus-sparkler",
+      description: "Bright citrus, sparkling water, and a little afternoon lift.",
+      category: ProductCategory.ICED_DRINK,
+      priceCents: 450,
+    },
+  });
 }
 
 main().finally(() => db.$disconnect());

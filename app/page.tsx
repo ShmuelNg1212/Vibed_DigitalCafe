@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { CatalogMenu } from "@/components/catalog-menu";
 import { getActiveCatalog } from "@/lib/catalog/queries";
+import { CartProvider } from "@/lib/cart/context";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,7 @@ export default async function Home() {
           <div className="max-w-sm justify-self-end"><p className="text-lg leading-8 text-stone-600">Small-batch coffee, warm pastries, and a quiet moment made for you. Order ahead, then take the scenic route.</p><a href="#menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-stone-900 underline decoration-amber-500 decoration-2 underline-offset-8">Browse today&apos;s menu <ArrowRight className="size-4" /></a></div>
         </div>
       </section>
-      <section id="menu" className="mx-auto max-w-7xl px-6 pb-20 lg:px-10"><CatalogMenu products={products} /></section>
+      <section id="menu" className="mx-auto max-w-7xl px-6 pb-20 lg:px-10"><CartProvider><CatalogMenu products={products} /></CartProvider></section>
     </main>
   );
 }
