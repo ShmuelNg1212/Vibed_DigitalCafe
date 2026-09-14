@@ -40,6 +40,7 @@ lib/
   orders/queries.ts                user-scoped order queries
   orders/status.ts                 allowed order transitions
   validation/                      Zod input schemas
+scripts/db-check.ts                server-only database diagnostic
 prisma/
   schema.prisma                    relational model source of truth
   migrations/                      committed database migrations
@@ -95,3 +96,9 @@ The seed runner is configured in `prisma.config.ts` as
 `tsx prisma/seed.ts`. It upserts the two local users, twelve catalog products,
 and their deterministic modifier records. The fixture is deliberately
 non-destructive so existing product references and order history are preserved.
+
+The home route keeps Prisma catalog fetching in the server component. Database
+errors reach `app/error.tsx`, where the user sees a safe catalog connection
+message; a successful query with no active products renders a separate empty
+catalog state. `npm run db:check` is a server-only diagnostic for connection,
+migration, and active-product status and is not exposed as a browser route.

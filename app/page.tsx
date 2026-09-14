@@ -8,7 +8,7 @@ import { CartProvider } from "@/lib/cart/context";
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const products = await getActiveCatalog().catch(() => []);
+  const products = await getActiveCatalog();
 
   return (
     <main className="min-h-screen bg-[#f7f4ef] text-stone-900">
@@ -22,7 +22,9 @@ export default async function Home() {
           <div className="max-w-sm justify-self-end"><p className="text-lg leading-8 text-stone-600">Small-batch coffee, warm pastries, and a quiet moment made for you. Order ahead, then take the scenic route.</p><a href="#menu" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-stone-900 underline decoration-amber-500 decoration-2 underline-offset-8">Browse today&apos;s menu <ArrowRight className="size-4" /></a></div>
         </div>
       </section>
-      <section id="menu" className="mx-auto max-w-7xl px-6 pb-20 lg:px-10"><CartProvider><CatalogMenu products={products} /></CartProvider></section>
+      <section id="menu" className="mx-auto max-w-7xl px-6 pb-20 lg:px-10">
+        {products.length > 0 ? <CartProvider><CatalogMenu products={products} /></CartProvider> : <div className="rounded-2xl border border-dashed border-stone-300 bg-white/60 px-6 py-16 text-center"><p className="text-xs font-bold uppercase tracking-[0.24em] text-amber-700">Freshly brewing</p><h2 className="mt-3 font-serif text-3xl text-stone-900">The menu is between batches.</h2><p className="mx-auto mt-3 max-w-md text-sm leading-6 text-stone-600">There are no active items available right now. Please check back soon.</p></div>}
+      </section>
     </main>
   );
 }

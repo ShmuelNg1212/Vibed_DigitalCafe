@@ -88,3 +88,9 @@ and recalculates authoritative totals.
 Checkout calculates all prices from current active catalog records, then writes
 the order and all snapshots in one Prisma transaction. Browser-submitted totals
 are never trusted.
+
+Catalog reads distinguish infrastructure failures from valid empty results. A
+database connection or migration error reaches the route error boundary; a
+successful query with no active products renders an intentional empty-catalog
+state. This prevents a `P1001` connection failure from appearing to customers
+as a normal empty menu.
