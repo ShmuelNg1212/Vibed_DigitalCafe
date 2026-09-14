@@ -18,7 +18,6 @@ describe("CartProvider hydration", () => {
     window.localStorage.setItem("digital-cafe-cart", JSON.stringify({ version: 1, items: [{ ...item, key: "stored", quantity: 2 }] }));
     const { result } = renderHook(() => useCart(), { wrapper: CartProvider });
 
-    expect(result.current.hydrated).toBe(false);
     await waitFor(() => expect(result.current.hydrated).toBe(true));
     expect(result.current.itemCount).toBe(2);
     act(() => result.current.addItem(item));

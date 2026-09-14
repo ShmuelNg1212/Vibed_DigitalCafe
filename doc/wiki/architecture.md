@@ -115,10 +115,10 @@ Prisma transaction. Success clears the cart and redirects to a user-scoped
 order confirmation page.
 
 Cart interactions are available to signed-out visitors. During the brief
-localStorage hydration window, add, customize, and quantity controls are
-disabled rather than allowing hydration to overwrite a newly accepted action.
-After hydration, product cards and the cart surfaces use the same provider
-instance; checkout is the first boundary that requires authentication.
+localStorage hydration window, the provider merges persisted lines with any
+in-memory actions rather than replacing them. Add and customize controls remain
+available without depending on animation-frame scheduling; checkout is the first
+boundary that requires authentication.
 
 Product images remain nullable display assets on `Product`. `ProductImage` uses
 `next/image` with a reserved responsive frame, `object-cover`, and an exact

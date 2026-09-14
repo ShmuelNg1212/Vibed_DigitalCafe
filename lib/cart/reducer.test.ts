@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { cartItemCount, cartItemKey, cartReducer, cartSubtotalCents, initialCartState } from "@/lib/cart/reducer";
+import { cartItemCount, cartItemKey, cartReducer, cartSubtotalCents, initialCartState, mergeCartItems } from "@/lib/cart/reducer";
 import { cartTotals } from "@/lib/cart/totals";
 
 const latte = {
@@ -50,5 +50,12 @@ describe("cart reducer", () => {
       taxCents: 91,
       totalCents: 1191,
     });
+  });
+
+  it("merges stored lines without discarding current cart actions", () => {
+    const current = cartReducer(initialCartState, { type: "add", item: latte });
+    const merged = mergeCartItems(current.items, [{ ...current.items[0], quantity: 2 }]);
+    expect(merged).toHaveLength(1);
+    expect(merged[0].quantity).toBe(3);
   });
 });
