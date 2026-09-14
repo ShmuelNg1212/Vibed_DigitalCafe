@@ -28,40 +28,45 @@ export type CatalogProduct = {
 };
 
 export async function getActiveCatalog(): Promise<CatalogProduct[]> {
-  const products = await db.product.findMany({
-    where: { isActive: true },
-    orderBy: [{ category: "asc" }, { name: "asc" }],
-    include: {
-      modifierGroups: {
-        orderBy: { sortOrder: "asc" },
-        include: {
-          options: {
-            where: { isActive: true },
-            orderBy: { sortOrder: "asc" },
+  try {
+    const products = await db.product.findMany({
+      where: { isActive: true },
+      orderBy: [{ category: "asc" }, { name: "asc" }],
+      include: {
+        modifierGroups: {
+          orderBy: { sortOrder: "asc" },
+          include: {
+            options: {
+              where: { isActive: true },
+              orderBy: { sortOrder: "asc" },
+            },
           },
         },
       },
-    },
-  });
+    });
 
-  return products.map(({ id, name, slug, description, category, priceCents, imageUrl, modifierGroups }) => ({
-    id,
-    name,
-    slug,
-    description,
-    category,
-    priceCents,
-    imageUrl,
-    modifierGroups: modifierGroups.map(({ id: groupId, name: groupName, minSelections, maxSelections, options }) => ({
-      id: groupId,
-      name: groupName,
-      minSelections,
-      maxSelections,
-      options: options.map(({ id: optionId, name: optionName, priceDeltaCents }) => ({
-        id: optionId,
-        name: optionName,
-        priceDeltaCents,
+    return products.map(({ id, name, slug, description, category, priceCents, imageUrl, modifierGroups }) => ({
+      id,
+      name,
+      slug,
+      description,
+      category,
+      priceCents,
+      imageUrl,
+      modifierGroups: modifierGroups.map(({ id: groupId, name: groupName, minSelections, maxSelections, options }) => ({
+        id: groupId,
+        name: groupName,
+        minSelections,
+        maxSelections,
+        options: options.map(({ id: optionId, name: optionName, priceDeltaCents }) => ({
+          id: optionId,
+          name: optionName,
+          priceDeltaCents,
+        })),
       })),
-    })),
-  }));
+    }));
+  } catch (error) {
+    console.error("[catalog] failed to load active products", error instanceof Error ? error.message : error);
+    throw error;
+  }
 }
