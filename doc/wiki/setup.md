@@ -110,6 +110,12 @@ hydrates persisted lines safely and merges them with immediate in-memory
 actions, so localStorage restoration cannot leave product controls stuck or
 discard a first click.
 
+If the app is opened through the forwarded development hostname, restart
+`npm run dev` after configuration changes and perform a hard browser reload.
+The configured development origin is allowlisted so the client bundle and HMR
+resources can load correctly. `npm test` includes a login network-error test and
+client add-to-cart tests.
+
 After an add, the cart trigger count and live confirmation update immediately;
 on compact layouts the cart sheet can be opened to review the added line.
 

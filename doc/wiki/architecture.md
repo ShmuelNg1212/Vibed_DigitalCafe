@@ -129,6 +129,11 @@ products and modifier configurations. These tests mount `ProductCard` and cart
 lines under the same provider, verifying that UI events produce visible cart
 state rather than only testing the reducer in isolation.
 
+The login client reports HTTP authentication failures separately from network
+failures and always clears its pending state. Development forwarded origins are
+explicitly allowlisted in `next.config.ts` so client hydration and HMR resources
+can load in the demo environment.
+
 Cart interactions are available to signed-out visitors. During the brief
 localStorage hydration window, the provider merges persisted lines with any
 in-memory actions rather than replacing them. Add and customize controls remain
