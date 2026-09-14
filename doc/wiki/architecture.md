@@ -114,6 +114,11 @@ re-reads active catalog records, and creates the order and snapshots in one
 Prisma transaction. Success clears the cart and redirects to a user-scoped
 order confirmation page.
 
+The menu owns controlled cart-sheet visibility and emits an accessible add
+confirmation. Product additions update the shared provider used by the desktop
+summary, mobile sheet, and cart trigger, so an accepted item is immediately
+observable without requiring authentication.
+
 Cart interactions are available to signed-out visitors. During the brief
 localStorage hydration window, the provider merges persisted lines with any
 in-memory actions rather than replacing them. Add and customize controls remain

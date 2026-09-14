@@ -110,6 +110,9 @@ hydrates persisted lines safely and merges them with immediate in-memory
 actions, so localStorage restoration cannot leave product controls stuck or
 discard a first click.
 
+After an add, the cart trigger count and live confirmation update immediately;
+on compact layouts the cart sheet can be opened to review the added line.
+
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
 
