@@ -3,6 +3,37 @@
 This is the canonical local development guide. It does not require Vercel or a
 hosted database.
 
+## Production Deployment
+
+The production hosting boundary is Vercel for the Next.js application and Neon
+for PostgreSQL. The Vercel project is `digitalcafe` under the configured Vercel
+account, and its GitHub repository is connected to
+`ShmuelNg1212/Vibed_DigitalCafe`.
+
+Configure these Vercel Production environment variables:
+
+- `DATABASE_URL`: the pooled Neon PostgreSQL connection string.
+- `SESSION_SECRET`: a stable, randomly generated secret. Keep it private;
+  changing it invalidates existing sessions.
+- `TAX_RATE_BPS`: server-side tax rate in basis points.
+- `NEXT_PUBLIC_TAX_RATE_BPS`: matching browser-visible tax rate in basis points.
+
+Apply database changes from a controlled shell before the deployment that uses
+them:
+
+```bash
+DATABASE_URL="your-production-url" npx prisma migrate deploy
+DATABASE_URL="your-production-url" npx prisma db seed
+DATABASE_URL="your-production-url" npm run db:check
+```
+
+The current seed creates the demo catalog and demo users. This is suitable for
+the demo deployment, but demo credentials must be changed or removed before
+using the site for real customers. Do not use the local Prisma Dev URL in
+Vercel. Vercel deployments receive automatic HTTPS and can use the generated
+`*.vercel.app` URL immediately; a custom domain can be added from the Vercel
+project settings.
+
 ## Requirements
 
 - Node.js 22 or newer
