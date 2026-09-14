@@ -96,8 +96,14 @@ products.
 Product fixtures include deterministic Unsplash image URLs. The application
 allowlists `images.unsplash.com` in `next.config.ts`; if image delivery is not
 available, product cards retain their category-based visual fallback.
-The cart is intentionally client-side and non-persistent; refreshing the page
-clears it until cart persistence is designed in a later phase.
+The cart is client-side and persists its normalized line items in browser
+localStorage under a versioned `digital-cafe-cart` key. Customer details are
+never stored there, and the server recalculates authoritative prices at
+checkout.
+
+Checkout is available at `/checkout` for authenticated customers. It validates
+name, email, and optional instructions, creates the order transactionally, then
+clears the cart and redirects to a user-scoped `/orders/success` confirmation.
 
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
