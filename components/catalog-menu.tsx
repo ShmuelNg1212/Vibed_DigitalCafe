@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight, Minus, Plus, ShoppingBag, Sparkles, Trash2 } from "lucide-react";
+import { ArrowRight, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,19 +18,7 @@ import { categoryOrder, categoryPresentation, formatMoney } from "@/lib/catalog/
 import type { CatalogProduct } from "@/lib/catalog/queries";
 import { useCart } from "@/lib/cart/context";
 import type { SelectedModifier } from "@/lib/cart/types";
-
-function PlaceholderImage({ product }: { product: CatalogProduct }) {
-  const presentation = categoryPresentation[product.category];
-  return (
-    <div className={`relative flex h-44 items-end overflow-hidden rounded-xl bg-gradient-to-br ${presentation.accent} p-4`}>
-      <div className="absolute -right-4 -top-10 size-36 rounded-full border-[18px] border-white/40" />
-      <div className="absolute right-10 top-8 size-12 rounded-full bg-white/50 blur-sm" />
-      <div className="relative flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-stone-700/70">
-        <Sparkles className="size-4" /> Digital Cafe
-      </div>
-    </div>
-  );
-}
+import { ProductImage } from "@/components/product-image";
 
 function ModifierPicker({
   product,
@@ -101,7 +89,7 @@ function ProductCard({ product }: { product: CatalogProduct }) {
 
   return (
     <article className="group rounded-2xl border border-stone-200 bg-white p-3 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <PlaceholderImage product={product} />
+      <ProductImage name={product.name} category={product.category} imageUrl={product.imageUrl} />
       <div className="p-3">
         <div className="flex items-start justify-between gap-3"><div><h3 className="font-serif text-2xl text-stone-900">{product.name}</h3><p className="mt-2 min-h-12 text-sm leading-6 text-stone-600">{product.description}</p></div><span className="shrink-0 rounded-full bg-amber-50 px-3 py-1 text-sm font-semibold text-amber-900">{formatMoney(product.priceCents)}</span></div>
         <div className="mt-5 flex items-center justify-between"><Badge variant="outline">{product.modifierGroups.length ? "Customizable" : "Ready to enjoy"}</Badge><Button size="sm" onClick={() => product.modifierGroups.length ? setCustomizing((open) => !open) : add()}>{product.modifierGroups.length ? (customizing ? "Close" : "Customize") : <><Plus /> Add</>}</Button></div>
