@@ -48,12 +48,12 @@ awaiting approval and must not be executed until approved.
 
 ## Verification and Rendezvous
 
-- [ ] Test demo customer login through the browser.
-- [ ] Test direct add, customized add, cart sheet, refresh persistence, and
+- [x] Test demo customer login through the browser.
+- [x] Test direct add, customized add, cart sheet, refresh persistence, and
       checkout redirect through the browser.
-- [ ] Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`.
-- [ ] Update this plan as tasks complete and inspect the full diff.
-- [ ] Update `doc/wiki/setup.md` with runtime troubleshooting.
-- [ ] Update `doc/wiki/architecture.md` with client hydration/runtime boundary
+- [x] Run `npm test`, `npm run lint`, `npm run typecheck`, and `npm run build`.
+- [x] Update this plan as tasks complete and inspect the full diff.
+- [x] Update `doc/wiki/setup.md` with runtime troubleshooting.
+- [x] Update `doc/wiki/architecture.md` with client hydration/runtime boundary
       notes if changed.
-- [ ] Commit with Conventional Commits, merge to `main`, and verify clean state.
+- [x] Commit with Conventional Commits, merge to `main`, and verify clean state.
