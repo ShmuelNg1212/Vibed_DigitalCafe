@@ -3,6 +3,17 @@
 Digital Cafe is a single Next.js App Router application using TypeScript,
 Tailwind CSS, shadcn/ui, Prisma, and PostgreSQL.
 
+## Production Boundary
+
+The Next.js application is deployed as Vercel serverless functions and static
+assets. Neon provides the hosted PostgreSQL database used by Prisma at runtime.
+Production migrations are applied explicitly with `prisma migrate deploy` and
+are not run on every Vercel build. Vercel environment variables provide the
+pooled `DATABASE_URL`, stable `SESSION_SECRET`, and tax configuration.
+
+The browser cart remains local to each visitor. Users, products, and orders are
+stored in Neon and are available across devices after authentication.
+
 ## Technology Choices
 
 - **Next.js App Router:** server-rendered catalog and order pages, route
