@@ -28,10 +28,12 @@ app/
   api/admin/products/[id]/         admin availability mutation
   actions.ts                       server action boundary
 components/
-  catalog-menu.tsx                 client catalog and cart interaction
+  catalog-menu.tsx                 categorized menu and cart surfaces
   ui/button.tsx                    shadcn/ui button primitive
+  ui/sheet.tsx                     accessible mobile cart sheet
 lib/
   db.ts                            Prisma client singleton
+  cart/                            client cart reducer, context, and payload
   auth/session.ts                  signed cookie session boundary
   catalog/queries.ts               active catalog query
   orders/checkout.ts               validated transactional checkout
@@ -59,6 +61,19 @@ and writes the order plus historical snapshots in one Prisma transaction.
 Prisma is never imported into browser components. The `lib/db.ts` singleton is
 safe across Next.js development reloads, and query/service modules are marked
 server-only where they are consumed directly by server components.
+
+The customer menu is fetched in the Home Server Component and converted to a
+serializable catalog view model before it crosses into the client boundary.
+Products are presented in Hot Coffee, Iced Drinks, and Bakery sections. A
+client-only `CartProvider` backed by `useReducer` powers product cards, the
+mobile shadcn/ui Sheet, and the desktop summary. Cart identity includes the
+canonical modifier selection, so different configurations of one product stay
+as separate lines while identical configurations combine quantities.
+
+Cart totals are display values only. The current Phase 2 checkout action is
+intentionally disabled until the checkout page consumes the normalized payload;
+the server checkout service remains the authority for prices and modifier
+validation.
 
 ## Authentication and Authorization
 

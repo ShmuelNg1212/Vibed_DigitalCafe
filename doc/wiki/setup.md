@@ -61,6 +61,7 @@ These credentials are for local development only.
 npm run dev          # start Next.js locally
 npm run lint         # run ESLint
 npm run typecheck    # run TypeScript without emitting files
+npm test              # run cart reducer tests
 npm run build        # create a production build
 npm run start        # serve the production build
 ```
@@ -78,6 +79,10 @@ npm run db:generate
 npm run db:migrate -- --name describe_change
 npm run db:seed
 ```
+
+The Phase 2 customer menu seeds Hot Coffee, Iced Drinks, and Bakery products.
+The cart is intentionally client-side and non-persistent; refreshing the page
+clears it until cart persistence is designed in a later phase.
 
 Do not edit generated Prisma client files. Change `prisma/schema.prisma`, then
 format, validate, migrate, and regenerate.
