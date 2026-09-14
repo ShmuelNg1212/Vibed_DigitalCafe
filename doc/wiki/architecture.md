@@ -29,6 +29,7 @@ app/
   actions.ts                       server action boundary
 components/
   catalog-menu.tsx                 categorized menu and cart surfaces
+  product-image.tsx                optimized remote image with fallback
   ui/button.tsx                    shadcn/ui button primitive
   ui/sheet.tsx                     accessible mobile cart sheet
 lib/
@@ -102,3 +103,8 @@ errors reach `app/error.tsx`, where the user sees a safe catalog connection
 message; a successful query with no active products renders a separate empty
 catalog state. `npm run db:check` is a server-only diagnostic for connection,
 migration, and active-product status and is not exposed as a browser route.
+
+Product images remain nullable display assets on `Product`. `ProductImage` uses
+`next/image` with a reserved responsive frame, `object-cover`, and an exact
+`images.unsplash.com` remote pattern. Missing or failed images fall back to the
+category-based CSS treatment without affecting product text or layout.
