@@ -86,6 +86,12 @@ the application replaceable if a managed identity provider is adopted later.
 Customer order history is scoped by user ID. Admin routes and mutations check
 the admin role on the server.
 
+Registration uses a Server Action with server-side Zod validation, bcrypt
+hashing, unique-email enforcement, and immediate signed-cookie session
+creation. The home navigation reads the server session and shows an account
+menu for authenticated users; sign out clears the same session cookie. Order
+history remains scoped by session user ID.
+
 ## Data and Deployment Notes
 
 PostgreSQL is the target database. Prisma migrations are committed and should
